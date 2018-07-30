@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-import { stat } from 'fs';
+import router from './router'
 
 Vue.use(Vuex)
 
@@ -36,6 +36,10 @@ export default new Vuex.Store({
       state.logged = false;
       state.amount = 0;
       alert("you are now logged out")
+    },
+    CHANGE_CATEGORY(state, category){
+      state.testing = `Category : ${category}`
+      router.push("/")
     }
   },
   actions: {
@@ -113,6 +117,45 @@ export default new Vuex.Store({
        alert("error adding item")
        console.log(err)
      })
-   }
+   },
+   filterCategory(context, category){
+     if(category == "All Categories"){
+      axios.get("http://localhost:3000/items")
+      .then(items => {
+          let itemArr = items.data;
+          console.log(itemArr);
+          context.commit("GET_ITEMS", itemArr);
+          context.commit("CHANGE_CATEGORY", category)
+          router.push('/')
+      })
+      .catch(err => {
+          console.log(err)
+      })
+     }else{
+      axios.post("http://localhost:3000/items/filterCategories", { category })
+      .then(items => {
+        let itemArr = items.data
+        console.log(itemArr)
+        context.commit("GET_ITEMS", itemArr)
+        context.commit("CHANGE_CATEGORY", category)
+       })
+       .catch(err => {
+           console.log(err)
+       })
+      }
+    },
+    removeItem(context, itemId){
+      let token = localStorage.getItem("token")
+      axios.delete(`http://localhost:3000/items/delete/${itemId}`, {
+        headers: { token }
+      })
+      .then((result => {
+        context.commit("GET_ITEMS", result.data)
+        alert("succesfully deleted item")
+      }))
+      .catch(err => {
+        alert("woops something went wrong")
+      })
+    }
   }
 })

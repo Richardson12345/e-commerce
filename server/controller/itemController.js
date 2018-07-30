@@ -1,5 +1,5 @@
 var itemModel = require("../model/itemModel");
-
+var mongoose = require("mongoose");
 
 class ItemController {
     static addItem(req,res){
@@ -46,6 +46,30 @@ class ItemController {
             }else{
                 res
                 .json(data)
+            }
+        })
+    }
+
+    static deleteItem(req,res){
+        itemModel.deleteOne({ _id : mongoose.Types.ObjectId( req.params.id )},(err,changes)=>{
+            if(err || changes.n == 0){
+                console.log(err);
+                res
+                .status(400)
+                .json(err)
+            }else{
+                console.log(changes);
+                itemModel.find({},(err, data)=>{
+                    if(err){
+                        res
+                        .status(500)
+                        .json(err)
+                    }else{
+                        res
+                        .status(200)
+                        .json(data)
+                    }
+                } )
             }
         })
     }

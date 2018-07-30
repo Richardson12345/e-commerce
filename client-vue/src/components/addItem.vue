@@ -25,7 +25,11 @@
           <div class="input-group-prepend">
             <span class="input-group-text" id="basic-addon1">item category</span>
           </div>
-          <input  v-model="category" type="text" class="form-control" placeholder="item category" aria-label="Username" aria-describedby="basic-addon1">
+          <select v-model="category" name="category">
+            <option value="innerwear">innerwear</option>
+            <option value="bags">bags</option>
+            <option value="outerwear">outerwear</option>
+          </select>
         </div>
           <div class="input-group mb-3">
           <div class="input-group-prepend">

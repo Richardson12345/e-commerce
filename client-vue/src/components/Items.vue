@@ -7,12 +7,17 @@
         <div class="col-sm-4" v-for="(item,key) in items"
          v-bind:key="key">
             <div class="card border-primary mb-3" id="items">
-                <div class="card-header">{{item.name}}</div>
-                <img class="card-img-top" id="image-border" v-bind:src="item.imageUrl" alt="Card image cap">
+                <div class="card-header">
+                     <h5 class="card-header"><strong>{{item.name}}</strong> </h5>
+                </div>
+                <div id="img-card">
+                  <img class="card-img-top" id="image-border" v-bind:src="item.imageUrl" alt="Card image cap">
+                </div>  
                 <div class="card-body text-primary">
                   <p class="card-title"> <strong>category: </strong> {{item.category}} </p>
                   <p class="card-text"> <strong>price: </strong> {{item.price}} </p>
                   <a class="btn btn-outline-info size-md" v-on:click="purchase(item.name, item.price)">add to cart</a>
+                  <span v-if="admin"> || <a class="btn btn-outline-info size-md" v-on:click="deleteItem(item._id)">delete</a></span>
                 </div>
             </div>
         </div>
@@ -30,7 +35,8 @@ export default {
   name: 'HelloWorld',
   data(){
     return{
-      isLogged : false
+      isLogged : false,
+      admin: false
     }
   },
   components:{
@@ -48,7 +54,8 @@ export default {
   methods:{
     ...mapActions([
       'getItems',
-      'purchaseItem'
+      'purchaseItem',
+      'removeItem'
     ]),
     purchase(item, price){
       let itemObj = {
@@ -61,15 +68,25 @@ export default {
         alert("please login to purchase item")
       }
     },
+    deleteItem(id){
+      // alert(id);
+      this.removeItem(id);
+    },
     checkUser(){
       if(localStorage.getItem('token')){
         this.isLogged = true
       }
-    }
+    },
+    isAdmin(){
+            if(localStorage.getItem("isAdmin") == "true"){
+                this.admin = true
+            }
+        }
   },
   mounted(){
     this.getItems(),
-    this.checkUser()
+    this.checkUser(),
+    this.isAdmin()
   }
 }
 </script>
@@ -97,5 +114,6 @@ a {
 
 #image-border{
   border: 1px solid blue;
+  height: auto;
 }
 </style>

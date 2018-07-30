@@ -15,17 +15,26 @@
             <li>
                 <a class="nav-link" @click="checkout" >Check Out <span class="sr-only">(current)</span></a>
             </li>
+             <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Categories
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <p class="dropdown-item" @click="filter(categories[0])">{{categories[0]}}</p> 
+                <p class="dropdown-item" @click="filter(categories[1])">{{categories[1]}}</p>
+                <p class="dropdown-item" @click="filter(categories[2])">{{categories[2]}}</p>
+                <p class="dropdown-item" @click="filter(categories[3])">{{categories[3]}}</p>
+                <!-- <a class="dropdown-item" href="#">Another action</a> -->
+              </div>
+            </li>
             <li v-if="admin == true">
                 <a class="nav-link" data-toggle="modal" data-target="#addItemModal" >add item<span class="sr-only">(current)</span></a>
             </li>
-            <li>
-                <!-- <a class="nav-link" href="#" v-if="admin">add item <span class="sr-only">(current)</span></a> -->
-            </li>
-          </ul>
-          <form class="form-inline my-2 my-lg-0">
-            <button class="btn btn-outline-primary my-2 my-md-0" @click="signout" type="submit" v-if="isLogged">log-out</button>
-            <button class="btn btn-outline-primary my-2 my-md-0" @click="login" type="submit" v-else>login</button>
-          </form>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+              <button class="btn btn-outline-primary my-2 my-md-0" @click="signout" type="submit" v-if="isLogged">log-out</button>
+              <button class="btn btn-outline-primary my-2 my-md-0" @click="login" type="submit" v-else>login</button>
+            </form>
         </div>
     </nav> 
 </template> 
@@ -38,7 +47,8 @@ export default {
     data(){
         return{
             admin : false,
-            isLogged : false
+            isLogged : false,
+            categories : ["All Categories","bags", "innerwear", "outerwear"]
         }
     },
     computed: {
@@ -50,7 +60,8 @@ export default {
     methods: {
         ...mapActions([
             'triggerModal',
-            'logoutAcc'
+            'logoutAcc',
+            'filterCategory'
         ]),
         checkout(){
             this.$router.push('/checkout')
@@ -77,6 +88,9 @@ export default {
         },
         addItem(){
           alert("succesfully added itlamo em")
+        },
+        filter(category){
+         this.filterCategory(category)
         }
     },
     mounted(){
