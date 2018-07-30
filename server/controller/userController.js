@@ -1,5 +1,5 @@
 var userModel = require("../model/userModel");
-var bcrpyt = require("bcrypt");
+var bcrpyt = require('bcryptjs');
 var jwt = require('jsonwebtoken')
 
 
